@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lung Cancer Detection</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<div class="main-box">
+
+<h1>🫁 Lung Cancer Detection</h1>
+<p>Upload CT Scan Image and get AI Prediction</p>
+
+<form action="/predict" method="POST" enctype="multipart/form-data">
+
+<label for="file-upload" class="custom-file-upload">
+Choose CT Scan Image
+</label>
+
+<input
+type="file"
+id="file-upload"
+name="file"
+required
+onchange="showFileName()"
+>
+
+<p id="file-name">No file selected</p>
+
+<button type="submit">Analyze Scan</button>
+
+</form>
+
+{% if prediction is not none and prediction != "" %}
+<div class="result-box">
+
+<h2 class="{% if 'No Lung Cancer' in prediction %}safe{% else %}danger{% endif %}">
+{{ prediction }}
+</h2>
+
+{% if img_path %}
+<img src="{{ img_path }}" alt="Uploaded Scan">
+{% endif %}
+
+{% if explanation %}
+<p class="explanation">{{ explanation }}</p>
+{% endif %}
+
+</div>
+{% endif %}
+
+</div>
+
+<script>
+function showFileName(){
+let input = document.getElementById("file-upload");
+
+if(input.files.length > 0){
+document.getElementById("file-name").innerText = input.files[0].name;
+}else{
+document.getElementById("file-name").innerText = "No file selected";
+}
+}
+</script>
+
+</body>
+</html>
